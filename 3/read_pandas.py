@@ -54,7 +54,6 @@ def add_HR_zones(df, HR_max):
     #todo commpute zone boundaries
     zone_1_min = HR_max * 0.5 # 50%
     zone_1_max = HR_max * 0.6 # 60%
-
     zone_2_max = HR_max * 0.7 # 70%
     zone_3_max = HR_max * 0.8 # 80%
     zone_4_max = HR_max * 0.9 # 90%
@@ -62,11 +61,19 @@ def add_HR_zones(df, HR_max):
 
     #todo add columns to df
     df["zone1"] = df["HeartRate"] > zone_1_min and df["HeartRate"] < zone_1_max
+    df["zone2"] = df["HeartRate"] > zone_1_max and df["HeartRate"] < zone_2_max 
+    df["zone3"] = df["HeartRate"] > zone_2_max and df["HeartRate"] < zone_3_max
+    df["zone4"] = df["HeartRate"] > zone_3_max and df["HeartRate"] < zone_4_max
+    df["zone5"] = df["HeartRate"] > zone_4_max and df["HeartRate"] < zone_5_max
 
     return df
 
-#def compute_time_zones(df):
+def compute_time_zones(df):
     #compute the time in zone 1 etc.
+    
+    
+    
+    t_1 = sum (spalte)
 
     return[t_1, t_2, ...]
 
