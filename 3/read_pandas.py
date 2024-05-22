@@ -2,6 +2,7 @@
 
 # Paket für Bearbeitung von Tabellen
 import pandas as pd
+import numpy as np
 
 # Paket
 ## zuvor !pip install plotly
@@ -25,6 +26,12 @@ def read_my_csv():
 def read_activity_csv():
     path = "data/activities/activity.csv"
     df = pd.read_csv(path)
+
+    N=len(df)
+    df['time'] = np.array(range(N))
+    print(df["time"])
+
+
     return df
 
 # 
@@ -34,9 +41,10 @@ def compute_power_statistics(df):
     p_max = df["PowerOriginal"].max()
     return p_mean, p_max
 
-#def plot_pow_HR(df):
+def plot_pow_HR(df):
     #todo make plot
-
+    fig = px.line((), x=["time"], y=['PowerOriginal', 'HeartRate'])
+    
     return fig 
 
 #def add_HR_zones(df, ...):
@@ -76,8 +84,8 @@ if __name__ == "__main__":
     print('p_mean:',p_mean)
     print('p_max:',p_max)
     #------------------------------------------------
-    
-    
+    fig = plot_pow_HR(df)
+    print(fig)
 
 
 #%% Test
