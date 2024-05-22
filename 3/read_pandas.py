@@ -43,7 +43,7 @@ def compute_power_statistics(df):
 
 def plot_pow_HR(df):
     #todo make plot
-    fig = px.line((), x=["time"], y=['PowerOriginal', 'HeartRate'])
+    fig = px.line(df, x="time", y=['PowerOriginal', 'HeartRate'])
     
     return fig 
 
@@ -85,7 +85,7 @@ if __name__ == "__main__":
     print('p_max:',p_max)
     #------------------------------------------------
     fig = plot_pow_HR(df)
-    print(fig)
+    fig.show()
 
 
 #%% Test
