@@ -21,16 +21,18 @@ def read_my_csv():
     # Gibt den geladen Dataframe zurück
     return df
 
+# Read Activity Data
 def read_activity_csv():
     path = "data/activities/activity.csv"
     df = pd.read_csv(path)
     return df
 
+# 
 def compute_power_statistics(df):
     #todo compute mean and max
     p_mean = df["PowerOriginal"].mean()
-    print(p_mean)
-    return p_mean, #p_max
+    p_max = df["PowerOriginal"].max()
+    return p_mean, p_max
 
 #def plot_pow_HR(df):
     #todo make plot
@@ -68,7 +70,14 @@ def make_plot(df):
 
 if __name__ == "__main__":
     df = read_activity_csv()
-    p_mean = compute_power_statistics(df)
+    #------------------------------------------------
+    p_mean = compute_power_statistics(df)[0] # mean power
+    p_max = compute_power_statistics(df)[1] # max power
+    print('p_mean:',p_mean)
+    print('p_max:',p_max)
+    #------------------------------------------------
+    
+    
 
 
 #%% Test
