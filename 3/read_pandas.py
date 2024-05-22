@@ -74,6 +74,7 @@ def compute_time_zones(df):
     
     
     t_1 = sum (spalte)
+    t_2 
 
     return[t_1, t_2, ...]
 
