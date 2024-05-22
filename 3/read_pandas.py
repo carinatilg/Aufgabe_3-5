@@ -45,12 +45,21 @@ def plot_pow_HR(df):
     #todo make plot
     fig = px.line(df, x="time", y=['PowerOriginal', 'HeartRate'])
     
-    return fig 
+    return fig
+def compute_HR_max(df):
+    HR_max = df["HeartRate"].max() 
+    return HR_max
 
-#def add_HR_zones(df, ...):
-    #todo cpmpute zone boundaries
-    zone_1_min = ...
-    zone_1_max = ...
+def add_HR_zones(df, HR_max):
+    #todo commpute zone boundaries
+    zone_1_min = HR_max * 0.5 # 50%
+    zone_1_max = HR_max * 0.6 # 60%
+
+    zone_2_max = HR_max * 0.7 # 70%
+    zone_3_max = HR_max * 0.8 # 80%
+    zone_4_max = HR_max * 0.9 # 90%
+    zone_5_max = HR_max # 100%
+
     #todo add columns to df
     df["zone1"] = df["HeartRate"] > zone_1_min and df["HeartRate"] < zone_1_max
 
@@ -79,13 +88,14 @@ def make_plot(df):
 if __name__ == "__main__":
     df = read_activity_csv()
     #------------------------------------------------
-    p_mean = compute_power_statistics(df)[0] # mean power
-    p_max = compute_power_statistics(df)[1] # max power
+    p_mean, p_max = compute_power_statistics(df)
     print('p_mean:',p_mean)
     print('p_max:',p_max)
     #------------------------------------------------
     fig = plot_pow_HR(df)
     fig.show()
+    #------------------------------------------------
+    HR_max = compute_HR_max(df)
 
 
 #%% Test
