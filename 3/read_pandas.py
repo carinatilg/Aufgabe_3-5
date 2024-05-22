@@ -28,8 +28,9 @@ def read_activity_csv():
 
 def compute_power_statistics(df):
     #todo compute mean and max
-    p_mean = df.mean(numeric_only=True)
-    return p_mean, p_max
+    p_mean = df["PowerOriginal"].mean()
+    print(p_mean)
+    return p_mean, #p_max
 
 #def plot_pow_HR(df):
     #todo make plot
@@ -65,8 +66,9 @@ def make_plot(df):
     fig = px.line(df.head(2000), x= "Zeit in ms", y="Messwerte in mV")
     return fig
 
-#if __name__ == "__main__":
-    #df =read.activity.
+if __name__ == "__main__":
+    df = read_activity_csv()
+    p_mean = compute_power_statistics(df)
 
 
 #%% Test
