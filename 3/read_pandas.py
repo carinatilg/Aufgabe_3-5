@@ -141,8 +141,6 @@ if __name__ == "__main__":
     print("Power in Zone 4 [Watt]:",p_4)
     print("Power in Zone 5 [Watt]:",p_5)
 
-    print(df["Unnamed: 11"])
-    print(df)
 
 #%% Test
 
