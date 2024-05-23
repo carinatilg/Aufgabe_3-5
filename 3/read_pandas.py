@@ -46,6 +46,7 @@ def plot_pow_HR(df):
     fig = px.line(df, x="time", y=['PowerOriginal', 'HeartRate'])
     
     return fig
+
 def compute_HR_max(df):
     HR_max = df["HeartRate"].max() 
     return HR_max
@@ -60,23 +61,31 @@ def add_HR_zones(df, HR_max):
     zone_5_max = HR_max # 100%
 
     #todo add columns to df
-    df["zone1"] = df["HeartRate"] > zone_1_min and df["HeartRate"] < zone_1_max
-    df["zone2"] = df["HeartRate"] > zone_1_max and df["HeartRate"] < zone_2_max 
-    df["zone3"] = df["HeartRate"] > zone_2_max and df["HeartRate"] < zone_3_max
-    df["zone4"] = df["HeartRate"] > zone_3_max and df["HeartRate"] < zone_4_max
-    df["zone5"] = df["HeartRate"] > zone_4_max and df["HeartRate"] < zone_5_max
+    zone1_condition = (df["HeartRate"] > zone_1_min) & (df["HeartRate"] < zone_1_max)
+    zone2_condition = (df["HeartRate"] > zone_1_max) & (df["HeartRate"] < zone_2_max)
+    zone3_condition = (df["HeartRate"] > zone_2_max) & (df["HeartRate"] < zone_3_max)
+    zone4_condition = (df["HeartRate"] > zone_3_max) & (df["HeartRate"] < zone_4_max)
+    zone5_condition = (df["HeartRate"] > zone_4_max) & (df["HeartRate"] < zone_5_max)
+
+    df["zone1"] = np.where(zone1_condition, 1, 0)
+    df["zone2"] = np.where(zone2_condition, 1, 0) 
+    df["zone3"] = np.where(zone3_condition, 1, 0)
+    df["zone4"] = np.where(zone4_condition, 1, 0)
+    df["zone5"] = np.where(zone5_condition, 1, 0)
 
     return df
 
 def compute_time_zones(df):
     #compute the time in zone 1 etc.
-    
-    
-    
-    t_1 = sum (spalte)
-    t_2 
 
-    return[t_1, t_2, ...]
+    t_1 = sum(df["zone1"]) # time in zone 1
+    t_2 = sum(df["zone2"]) # time in zone 2
+    t_3 = sum(df["zone3"]) # time in zone 3
+    t_4 = sum(df["zone4"]) # time in zone 4
+    t_5 = sum(df["zone5"]) # time in zone 5
+    
+
+    return[t_1, t_2, t_3, t_4, t_5]
 
 #def compute_power_in_zone(df):
     # todo compute power per zone
@@ -104,7 +113,10 @@ if __name__ == "__main__":
     fig.show()
     #------------------------------------------------
     HR_max = compute_HR_max(df)
-
+    #------------------------------------------------
+    add_HR_zones(df, 220)
+    t_1, t_2, t_3, t_4, t_5 = compute_time_zones(df)
+    print(t_1, t_2, t_3, t_4, t_5)
 
 #%% Test
 
