@@ -14,7 +14,7 @@ def read_my_csv():
     # Einlesen eines Dataframes
     ## "\t" steht für das Trennzeichen in der txt-Datei (Tabulator anstelle von Beistrich)
     ## header = None: es gibt keine Überschriften in der txt-Datei
-    df = pd.read_csv("data/ekg_data/01_Ruhe.txt", sep="\t", header=None)
+    df = pd.read_csv("../data/ekg_data/01_Ruhe.txt", sep="\t", header=None)
 
     # Setzt die Columnnames im Dataframe
     df.columns = ["Messwerte in mV","Zeit in ms"]
