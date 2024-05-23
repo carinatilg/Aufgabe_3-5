@@ -117,11 +117,11 @@ if __name__ == "__main__":
     #------------------------------------------------
     add_HR_zones(df, 200)
     t_1, t_2, t_3, t_4, t_5 = compute_time_zones(df)
-    print("Zeit in Zone 1 in Sekunden:",t_1)
-    print("Zeit in Zone 2 in Sekunden:",t_2)
-    print("Zeit in Zone 3 in Sekunden:",t_3)
-    print("Zeit in Zone 4 in Sekunden:",t_4)
-    print("Zeit in Zone 5 in Sekunden:",t_5)
+    print("Zeit in Zone 1 [Sekunden]:",t_1)
+    print("Zeit in Zone 2 [Sekunden]:",t_2)
+    print("Zeit in Zone 3 [Sekunden]:",t_3)
+    print("Zeit in Zone 4 [Sekunden]:",t_4)
+    print("Zeit in Zone 5 [Sekunden]:",t_5)
 
 #%% Test
 
