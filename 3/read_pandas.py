@@ -44,7 +44,6 @@ def compute_power_statistics(df):
 def plot_pow_HR(df):
     #todo make plot
     fig = px.line(df, x="time", y=['PowerOriginal', 'HeartRate'])
-    
     return fig
 
 def compute_HR_max(df):
@@ -53,6 +52,7 @@ def compute_HR_max(df):
 
 def add_HR_zones(df, HR_max):
     #todo commpute zone boundaries
+    # set Values for each zone
     zone_1_min = HR_max * 0.5 # 50%
     zone_1_max = HR_max * 0.6 # 60%
     zone_2_max = HR_max * 0.7 # 70%
@@ -61,13 +61,14 @@ def add_HR_zones(df, HR_max):
     zone_5_max = HR_max # 100%
 
     #todo add columns to df
+    # set conditions for each zone
     zone1_condition = (df["HeartRate"] > zone_1_min) & (df["HeartRate"] < zone_1_max)
     zone2_condition = (df["HeartRate"] > zone_1_max) & (df["HeartRate"] < zone_2_max)
     zone3_condition = (df["HeartRate"] > zone_2_max) & (df["HeartRate"] < zone_3_max)
     zone4_condition = (df["HeartRate"] > zone_3_max) & (df["HeartRate"] < zone_4_max)
     zone5_condition = (df["HeartRate"] > zone_4_max) & (df["HeartRate"] < zone_5_max)
 
-    df["zone1"] = np.where(zone1_condition, 1, 0)
+    df["zone1"] = np.where(zone1_condition, 1, 0) # 1 if condition True, 0 if False
     df["zone2"] = np.where(zone2_condition, 1, 0) 
     df["zone3"] = np.where(zone3_condition, 1, 0)
     df["zone4"] = np.where(zone4_condition, 1, 0)
@@ -85,11 +86,11 @@ def compute_time_zones(df):
     t_5 = sum(df["zone5"]) # time in zone 5
     
 
-    return[t_1, t_2, t_3, t_4, t_5]
+    return[t_1, t_2, t_3, t_4, t_5] # return time in zones
 
-#def compute_power_in_zone(df):
+def compute_power_in_zone(df):
     # todo compute power per zone
-
+    
     retrun[p_1, p_2,...]
 
 
@@ -116,7 +117,11 @@ if __name__ == "__main__":
     #------------------------------------------------
     add_HR_zones(df, 200)
     t_1, t_2, t_3, t_4, t_5 = compute_time_zones(df)
-    print(t_1, t_2, t_3, t_4, t_5)
+    print("Zeit in Zone 1 in Sekunden:",t_1)
+    print("Zeit in Zone 2 in Sekunden:",t_2)
+    print("Zeit in Zone 3 in Sekunden:",t_3)
+    print("Zeit in Zone 4 in Sekunden:",t_4)
+    print("Zeit in Zone 5 in Sekunden:",t_5)
 
 #%% Test
 
