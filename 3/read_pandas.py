@@ -77,19 +77,19 @@ def add_HR_zones(df, HR_max):
     return df
 
 def compute_time_zones(df):
-    #compute the time in zone 1 etc.
+    #compute the time in zones 1 to 5
 
-    t_1 = sum(df["zone1"]) # time in zone 1
+    t_1 = sum(df["zone1"]) # time in zone 1 in seconds
     t_2 = sum(df["zone2"]) # time in zone 2
     t_3 = sum(df["zone3"]) # time in zone 3
     t_4 = sum(df["zone4"]) # time in zone 4
     t_5 = sum(df["zone5"]) # time in zone 5
     
 
-    return[t_1, t_2, t_3, t_4, t_5] # return time in zones
+    return[t_1, t_2, t_3, t_4, t_5] # return time in zones 1 to 5
 
 def compute_power_in_zone(df):
-    # todo compute power per zone
+    # compute power per zone
     
     p_1 = (df["PowerOriginal"] * df["zone1"]).mean()
     p_2 = (df["PowerOriginal"] * df["zone2"]).mean()
@@ -117,7 +117,7 @@ def make_plotpower(df):
     print('p_max:',p_max)
     #------------------------------------------------
     fig = plot_pow_HR(df)
-    fig.show()
+    #fig.show()
     return fig
 
 if __name__ == "__main__":
@@ -133,12 +133,16 @@ if __name__ == "__main__":
     print("Zeit in Zone 4 [Sekunden]:",t_4)
     print("Zeit in Zone 5 [Sekunden]:",t_5)
     #------------------------------------------------
+
     p_1, p_2, p_3, p_4, p_5 = compute_power_in_zone(df)
     print("Power in Zone 1 [Watt]:",p_1)
     print("Power in Zone 2 [Watt]:",p_2)
     print("Power in Zone 3 [Watt]:",p_3)
     print("Power in Zone 4 [Watt]:",p_4)
     print("Power in Zone 5 [Watt]:",p_5)
+
+    print(df["Unnamed: 11"])
+    print(df)
 
 #%% Test
 

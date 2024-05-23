@@ -3,6 +3,9 @@ from read_pandas import read_my_csv
 from read_pandas import make_plot
 from read_pandas import make_plotpower
 from read_pandas import read_activity_csv
+from read_pandas import add_HR_zones
+from read_pandas import compute_time_zones
+from read_pandas import compute_power_in_zone
 
 
 # Wo startet sie Zeitreihe
@@ -27,4 +30,14 @@ with tab2:
     st.header("Power-Data")
     fig2 = make_plotpower(df)
     st.plotly_chart(fig2)
-    eingabe = st.text_input("maximale Herzfrequenz:")
+    eingabe = st.number_input("Maximale Herzfrequenz:")
+    add_HR_zones(df, eingabe)
+    t_1, t_2, t_3, t_4, t_5 = compute_time_zones(df)
+    p_1, p_2, p_3, p_4, p_5 = compute_power_in_zone(df)
+
+    st.write("Du warst",t_1, "Sekunden in Zone 1"
+             "Du warst",t_2, "Sekunden in Zone 2"
+             "Du warst",t_3, "Sekunden in Zone 3"
+             "Du warst",t_4, "Sekunden in Zone 4"
+             "Du warst",t_5, "Sekunden in Zone 5")
+    
