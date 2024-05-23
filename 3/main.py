@@ -27,3 +27,4 @@ with tab2:
     st.header("Power-Data")
     fig2 = make_plotpower(df)
     st.plotly_chart(fig2)
+    eingabe = st.text_input("maximale Herzfrequenz:")
