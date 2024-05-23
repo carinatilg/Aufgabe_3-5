@@ -24,7 +24,7 @@ def read_my_csv():
 
 # Read Activity Data
 def read_activity_csv():
-    path = "data/activities/activity.csv"
+    path = "../data/activities/activity.csv"
     df = pd.read_csv(path)
 
     N=len(df)
@@ -109,7 +109,7 @@ def make_plot(df):
     fig = px.line(df.head(2000), x= "Zeit in ms", y="Messwerte in mV")
     return fig
 
-if __name__ == "__main__":
+def make_plotpower(df):
     df = read_activity_csv()
     #------------------------------------------------
     p_mean, p_max = compute_power_statistics(df)
@@ -118,6 +118,10 @@ if __name__ == "__main__":
     #------------------------------------------------
     fig = plot_pow_HR(df)
     fig.show()
+    return fig
+
+if __name__ == "__main__":
+    df = read_activity_csv()
     #------------------------------------------------
     HR_max = compute_HR_max(df)
     #------------------------------------------------
