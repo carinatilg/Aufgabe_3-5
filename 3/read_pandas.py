@@ -114,7 +114,7 @@ if __name__ == "__main__":
     #------------------------------------------------
     HR_max = compute_HR_max(df)
     #------------------------------------------------
-    add_HR_zones(df, 220)
+    add_HR_zones(df, 200)
     t_1, t_2, t_3, t_4, t_5 = compute_time_zones(df)
     print(t_1, t_2, t_3, t_4, t_5)
 
