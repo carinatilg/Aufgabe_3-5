@@ -91,7 +91,13 @@ def compute_time_zones(df):
 def compute_power_in_zone(df):
     # todo compute power per zone
     
-    retrun[p_1, p_2,...]
+    p_1 = (df["PowerOriginal"] * df["zone1"]).mean()
+    p_2 = (df["PowerOriginal"] * df["zone2"]).mean()
+    p_3 = (df["PowerOriginal"] * df["zone3"]).mean()
+    p_4 = (df["PowerOriginal"] * df["zone4"]).mean()
+    p_5 = (df["PowerOriginal"] * df["zone5"]).mean()
+
+    return [p_1, p_2, p_3, p_4, p_5] # return power in zones
 
 
 
@@ -122,6 +128,13 @@ if __name__ == "__main__":
     print("Zeit in Zone 3 [Sekunden]:",t_3)
     print("Zeit in Zone 4 [Sekunden]:",t_4)
     print("Zeit in Zone 5 [Sekunden]:",t_5)
+    #------------------------------------------------
+    p_1, p_2, p_3, p_4, p_5 = compute_power_in_zone(df)
+    print("Power in Zone 1 [Watt]:",p_1)
+    print("Power in Zone 2 [Watt]:",p_2)
+    print("Power in Zone 3 [Watt]:",p_3)
+    print("Power in Zone 4 [Watt]:",p_4)
+    print("Power in Zone 5 [Watt]:",p_5)
 
 #%% Test
 
