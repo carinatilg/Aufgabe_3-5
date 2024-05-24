@@ -63,5 +63,5 @@ if __name__ == "__main__":
 
 
 # todo
-# x achse mit mehreren werten kompatible nicht fix bei 1800
-# 
+# skalierung der x achse anpassen zb minuten und nur anzeige von intervallen die auch berechnet wurden
+# main in main.py auslagern
