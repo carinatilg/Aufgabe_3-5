@@ -41,31 +41,15 @@ def create_power_curve(df, intervall_list, fs):
 
 
 
-
-'''
-    best_effort = 0
-    best_effort_power = 0
-    for i in range(0, N-n):
-        p_mean = df["PowerOriginal"][i:i+n].mean()
-        if p_mean > best_effort_power:
-            best_effort_power = p_mean
-            best_effort = i
-    return best_effort 
-'''
-
-
-
-
-
 # main
 if __name__ == "__main__":
     df = read_activity_csv()
     best_power = find_best_effort(df, 30, 1)
     print(best_power)
-    df["BestPower"] = best_power
-    #print(df.head())
+    
 #------------------------------------------------------------
     intervall_list = [1, 30, 60, 120, 300, 600, 1200, 1800] # Zeitintervalle in Sekunden 1s - 30min
     fs = 1 # Anzahl der Werte pro Sekunde
-    print(create_power_curve(df, intervall_list, fs))
+    max_power_df = create_power_curve(df, intervall_list, fs)
+    print(max_power_df)
 
