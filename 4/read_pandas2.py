@@ -37,6 +37,13 @@ def create_power_curve(df, intervall_list, fs):
      })
            
     return max_power_df
+
+
+def make_plot_power_curve(max_power_df, intervall_list):
+    
+    fig = px.line(max_power_df.head(intervall_list[-1]), x="TimeIntervall", y="MaxPower")
+    fig.show()
+    return fig
     
 
 
@@ -52,4 +59,9 @@ if __name__ == "__main__":
     fs = 1 # Anzahl der Werte pro Sekunde
     max_power_df = create_power_curve(df, intervall_list, fs)
     print(max_power_df)
+    make_plot_power_curve(max_power_df, intervall_list)
 
+
+# todo
+# x achse mit mehreren werten kompatible nicht fix bei 1800
+# 
