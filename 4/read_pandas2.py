@@ -55,13 +55,12 @@ if __name__ == "__main__":
     print(best_power)
     
 #------------------------------------------------------------
-    intervall_list = [1, 30, 60, 120, 300, 600, 1200, 1800] # Zeitintervalle in Sekunden 1s - 30min
+    intervall_l = [1, 30, 60, 120, 300, 600, 1200, 1800] # Zeitintervalle in Sekunden 1s - 30min
+    intervall_li = np.array(intervall_l)
+    intervall_list = intervall_li/60
     fs = 1 # Anzahl der Werte pro Sekunde
     max_power_df = create_power_curve(df, intervall_list, fs)
     print(max_power_df)
     make_plot_power_curve(max_power_df, intervall_list)
 
 
-# todo
-# skalierung der x achse anpassen zb minuten und nur anzeige von intervallen die auch berechnet wurden
-# main in main.py auslagern
