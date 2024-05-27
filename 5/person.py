@@ -25,7 +25,6 @@ class Person:
         und die die Person als Dictionary zurück gibt"""
 
         person_data = Person.load_person_data()
-        #print(suchstring)
         if suchstring == "None":
             return {}
 
@@ -34,10 +33,21 @@ class Person:
         nachname = two_names[0]
 
         for eintrag in person_data:
-            print(eintrag)
             if (eintrag["lastname"] == nachname and eintrag["firstname"] == vorname):
-                print()
+                
+                return eintrag
+        else:
+            return {}
+        
+    @staticmethod   
+    def load_by_id(such_id):
+        person_data = Person.load_person_data()
+        
+        if such_id == "None":
+            return {}
 
+        for eintrag in person_data:
+            if (eintrag["id"] == such_id):
                 return eintrag
         else:
             return {}
@@ -51,40 +61,24 @@ class Person:
 
     def calc_age(self):
         current_year = datetime.now().year
-        age = current_year - self.date_of_birth
+        birth_year = int(self.date_of_birth)
+        age = current_year - birth_year
         return age
     
     def calc_max_heart_rate(self):
-        age = Person.calc_age(self)
+        age = self.calc_age()
         max_heart_rate = 220 - age 
         return max_heart_rate
     
-    def load_by_id(self,such_id):
-        """ Eine Funktion der ein id übergeben wird
-        und die die Person als Dictionary zurück gibt"""
-
-        person_data = Person.load_person_data()
-        
-        if such_id == "None":
-            return {}
-
-        for eintrag in person_data:
-            print(eintrag)
-            if (eintrag["id"] == id):
-                print()
-
-                return eintrag
-        else:
-            return {}
-
-
+# ----------------------------------------
 if __name__ == "__main__":
     print("This is a module with some functions to read the person data")
     persons = Person.load_person_data()
     person_names = Person.get_person_list(persons)
     print(person_names)
     print(Person.find_person_data_by_name("Huber, Julian"))
-    print("ALter:",Person.calc_max_heart_rate(20)) #alter
+    print("Alter:",Person.calc_age()) #alter
+    print("Maximale Herzfrequenz: ",Person.calc_max_heart_rate())
     print("Eintrag von gewählter ID:",Person.load_by_id(1)) #id
     
     
