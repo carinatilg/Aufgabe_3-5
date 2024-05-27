@@ -41,7 +41,8 @@ def create_power_curve(df, intervall_list, fs):
 
 def make_plot_power_curve(max_power_df, intervall_list):
     
-    fig = px.line(max_power_df.head(intervall_list[-1]), x="TimeIntervall", y="MaxPower")
+    #fig = px.line(max_power_df.head(intervall_list[-1]), x="TimeIntervall", y="MaxPower")
+    fig = px.line(max_power_df, x="TimeIntervall", y="MaxPower")
     fig.show()
     return fig
     
@@ -55,9 +56,7 @@ if __name__ == "__main__":
     print(best_power)
     
 #------------------------------------------------------------
-    intervall_l = [1, 30, 60, 120, 300, 600, 1200, 1800] # Zeitintervalle in Sekunden 1s - 30min
-    intervall_li = np.array(intervall_l)
-    intervall_list = intervall_li/60
+    intervall_list = [1, 30, 60, 120, 300, 600, 1200, 1800] # Zeitintervalle in Sekunden 1s - 30min
     fs = 1 # Anzahl der Werte pro Sekunde
     max_power_df = create_power_curve(df, intervall_list, fs)
     print(max_power_df)
