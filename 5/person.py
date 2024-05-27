@@ -77,8 +77,11 @@ if __name__ == "__main__":
     person_names = Person.get_person_list(persons)
     print(person_names)
     print(Person.find_person_data_by_name("Huber, Julian"))
-    print("Alter:",Person.calc_age()) #alter
-    print("Maximale Herzfrequenz: ",Person.calc_max_heart_rate())
-    print("Eintrag von gewählter ID:",Person.load_by_id(1)) #id
+
+    person_1_dict = Person.find_person_data_by_name("Huber, Julian")
+    person_1 = Person(person_1_dict)
+    print("Alter:",person_1.calc_age()) #alter
+    print("Maximale Herzfrequenz: ", person_1.calc_max_heart_rate())
+    print("Eintrag von gewählter ID:", Person.load_by_id(1)) #id
     
     
