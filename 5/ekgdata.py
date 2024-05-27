@@ -18,22 +18,23 @@ class EKGdata:
         self.df = pd.read_csv(self.data, sep='\t', header=None, names=['EKG in mV','Time in ms',])
 
 # %% Test
-    
-    def load_by_id(self, such_id):
+    @staticmethod
+    def load_by_id(such_id):
     # für alle ekg test über alle personen
     # for pereon in prsons
     #for ekgtest in test    def load_by_id(such_id):
 
         person_data = Person.load_person_data()
-        
+
         if such_id == "None":
             return {}
-
+        
         for eintrag in person_data:
-            if (eintrag["id"] == such_id):
-                return eintrag
-        else:
-            return {}
+            for ekg_test in eintrag["ekg_tests"]:
+                if (ekg_test["id"] == such_id):
+                    return ekg_test
+        return {}
+       
 
         
         
@@ -46,3 +47,9 @@ if __name__ == "__main__":
     print(ekg_dict)
     ekg = EKGdata(ekg_dict)
     print(ekg.df.head())
+    #------------------------------------------------------------
+    ekg_data = EKGdata.load_by_id(1)
+    print("Eintrag von gewählter ID EKG:", ekg_data) #id
+
+
+# %%
