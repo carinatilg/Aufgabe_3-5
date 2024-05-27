@@ -43,23 +43,23 @@ def make_plot_power_curve(max_power_df, intervall_list):
     
     #fig = px.line(max_power_df.head(intervall_list[-1]), x="TimeIntervall", y="MaxPower")
     fig = px.line(max_power_df, x="TimeIntervall", y="MaxPower")
+    fig.update_xaxes(title_text='Time intervall [min]')
+    fig.update_yaxes(title_text='Max Power [W]')
+
+    # Festlegen der gewünschten Werte auf der x-Achse und y-Achse
+    array_iL = np.array(intervall_list)/60
+
+    desired_x_ticks = intervall_list # Werte der x-Achse als Liste
+    desired_x_text = np.round(array_iL,1) # Texte der x-Achse als Liste (die Werte der x-Achse in Minuten)
+    
+
+    fig.update_layout(
+        xaxis=dict(
+            tickvals=desired_x_ticks,  # Die gewünschten Werte auf der x-Achse
+            ticktext=desired_x_text   # Die Texte, die für diese Werte angezeigt werden sollen
+        )
+    )
+
     fig.show()
-    return fig
-    
-
-
-
-# main
-if __name__ == "__main__":
-    df = read_activity_csv()
-    best_power = find_best_effort(df, 30, 1)
-    print(best_power)
-    
-#------------------------------------------------------------
-    intervall_list = [1, 30, 60, 120, 300, 600, 1200, 1800] # Zeitintervalle in Sekunden 1s - 30min
-    fs = 1 # Anzahl der Werte pro Sekunde
-    max_power_df = create_power_curve(df, intervall_list, fs)
-    print(max_power_df)
-    make_plot_power_curve(max_power_df, intervall_list)
 
 
