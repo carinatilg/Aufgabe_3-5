@@ -72,15 +72,21 @@ class EKGdata:
 
     def estimate_hr(self, peaks, sampling_rate):
         # Calculate time differences between peaks
-        time_diffs = [(peaks[i] - peaks[i-1]) / sampling_rate for i in range(1, len(peaks))]
+        time_difference = [(peaks[i] - peaks[i-1]) / sampling_rate for i in range(1, len(peaks))]
 
         # Calculate average time difference
-        avg_time_diff = sum(time_diffs) / len(time_diffs)
+        avg_time_difference = sum(time_difference) / len(time_difference)
 
         # Calculate heart rate (beats per minute)
-        heart_rate = 60 / avg_time_diff
+        heart_rate = 60 / avg_time_difference
 
         return heart_rate
+    
+    def plot_time_series(self, peaks):
+        df.loc[:, "is_peak"] = False
+        df.loc[peaks, "is_peak"] = True
+        fig = px.scatter(df.iloc[0:5000], x='Time in ms', y='EKG in mV', color='is_peak') 
+        return fig 
 
         
 
@@ -99,16 +105,15 @@ if __name__ == "__main__":
     df = pd.read_csv(r'data/ekg_data/01_Ruhe.txt', sep='\t', header=None, names=['EKG in mV','Time in ms',])
     peaks = EKGdata.find_peaks(df["EKG in mV"].copy(), 340, 5)
     #print(peaks)
-    df.loc[:, "is_peak"] = False
-    df.loc[peaks, "is_peak"] = True
-    fig = px.scatter(df.iloc[0:5000], x='Time in ms', y='EKG in mV', color='is_peak')   
-    fig.show() 
     # peaks als Attribut der Klasse EKGdata hinzufügen
     ekg.peaks_as_attribute(peaks)
     print(ekg.peaks_ekg)
     #------------------------------------------------------------
     heart_rate = ekg.estimate_hr(peaks, 1000)
-    print("Heart rate: ", heart_rate)
+    print("Heart Rate: ", heart_rate)
+    #------------------------------------------------------------
+    fig = ekg.plot_time_series(peaks)
+    fig.show() 
 
 
 
