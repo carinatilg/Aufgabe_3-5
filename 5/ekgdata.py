@@ -1,6 +1,8 @@
 import json
 import pandas as pd
 from person import Person
+import plotly.express as px
+import numpy as np   
 
 # %% Objekt-Welt
 
@@ -16,6 +18,7 @@ class EKGdata:
         self.date = ekg_dict["date"]
         self.data = ekg_dict["result_link"]
         self.df = pd.read_csv(self.data, sep='\t', header=None, names=['EKG in mV','Time in ms',])
+        self.peaks_ekg = []
 
 # %% Test
     @staticmethod
@@ -34,8 +37,37 @@ class EKGdata:
                 if (ekg_test["id"] == such_id):
                     return ekg_test
         return {}
-       
+    
 
+    @staticmethod   
+    
+    def find_peaks(series, threshold, respacing_factor=5):
+
+        # Respace the series
+        series = series.iloc[::respacing_factor]
+    
+        # Filter the series
+        series = series[series>threshold]
+
+        peaks = []
+        last = 0
+        current = 0
+        next = 0
+
+        for index, row in series.items():
+            last = current
+            current = next
+            next = row
+
+            if last < current and current > next and current > threshold:
+                peaks.append(index-respacing_factor)
+
+        
+        return peaks
+        
+    def peaks_as_attribute(self, peaks):
+        self.peaks_ekg = peaks
+        return self.peaks_ekg
         
         
 
@@ -50,6 +82,24 @@ if __name__ == "__main__":
     #------------------------------------------------------------
     ekg_data = EKGdata.load_by_id(1)
     print("Eintrag von gewählter ID EKG:", ekg_data) #id
+    #------------------------------------------------------------
+    df = pd.read_csv(r'data/ekg_data/01_Ruhe.txt', sep='\t', header=None, names=['EKG in mV','Time in ms',])
+    peaks = EKGdata.find_peaks(df["EKG in mV"].copy(), 340, 5)
+    #print(peaks)
+    df.loc[:, "is_peak"] = False
+    df.loc[peaks, "is_peak"] = True
+    fig = px.scatter(df.iloc[0:5000], x='Time in ms', y='EKG in mV', color='is_peak')   
+    fig.show() 
+
+    ekg.peaks_as_attribute(peaks)
+    print(ekg.peaks_ekg)
+
+
+
+    
+
+    
+    
 
 
 # %%
