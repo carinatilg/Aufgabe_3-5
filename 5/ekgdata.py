@@ -68,7 +68,20 @@ class EKGdata:
     def peaks_as_attribute(self, peaks):
         self.peaks_ekg = peaks
         return self.peaks_ekg
-        
+    
+
+    def calculate_heart_rate(self, peaks, sampling_rate):
+        # Calculate time differences between peaks
+        time_diffs = [(peaks[i] - peaks[i-1]) / sampling_rate for i in range(1, len(peaks))]
+
+        # Calculate average time difference
+        avg_time_diff = sum(time_diffs) / len(time_diffs)
+
+        # Calculate heart rate (beats per minute)
+        heart_rate = 60 / avg_time_diff
+
+        return heart_rate
+
         
 
 if __name__ == "__main__":
@@ -90,9 +103,12 @@ if __name__ == "__main__":
     df.loc[peaks, "is_peak"] = True
     fig = px.scatter(df.iloc[0:5000], x='Time in ms', y='EKG in mV', color='is_peak')   
     fig.show() 
-
+    # peaks als Attribut der Klasse EKGdata hinzufügen
     ekg.peaks_as_attribute(peaks)
     print(ekg.peaks_ekg)
+    #------------------------------------------------------------
+    heart_rate = ekg.calculate_heart_rate(peaks, 1000)
+    print("Heart rate: ", heart_rate)
 
 
 
