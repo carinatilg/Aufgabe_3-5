@@ -70,7 +70,7 @@ class EKGdata:
         return self.peaks_ekg
     
 
-    def calculate_heart_rate(self, peaks, sampling_rate):
+    def estimate_hr(self, peaks, sampling_rate):
         # Calculate time differences between peaks
         time_diffs = [(peaks[i] - peaks[i-1]) / sampling_rate for i in range(1, len(peaks))]
 
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     ekg.peaks_as_attribute(peaks)
     print(ekg.peaks_ekg)
     #------------------------------------------------------------
-    heart_rate = ekg.calculate_heart_rate(peaks, 1000)
+    heart_rate = ekg.estimate_hr(peaks, 1000)
     print("Heart rate: ", heart_rate)
 
 
