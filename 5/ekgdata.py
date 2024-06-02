@@ -14,11 +14,12 @@ class EKGdata:
 
     def __init__(self, ekg_dict):
         pass
-        self.id = ekg_dict["id"]
+        self.id = int(ekg_dict["id"])
         self.date = ekg_dict["date"]
         self.data = ekg_dict["result_link"]
         self.df = pd.read_csv(self.data, sep='\t', header=None, names=['EKG in mV','Time in ms',])
         self.peaks_ekg = []
+        self.estimate_HR = self.estimate_hr(self.peaks_ekg, 1000)
 
 # %% Test
     @staticmethod
@@ -62,7 +63,6 @@ class EKGdata:
             if last < current and current > next and current > threshold:
                 peaks.append(index-respacing_factor)
 
-        
         return peaks
         
     def peaks_as_attribute(self, peaks):
@@ -73,10 +73,8 @@ class EKGdata:
     def estimate_hr(self, peaks, sampling_rate):
         # Calculate time differences between peaks
         time_difference = [(peaks[i] - peaks[i-1]) / sampling_rate for i in range(1, len(peaks))]
-
         # Calculate average time difference
         avg_time_difference = sum(time_difference) / len(time_difference)
-
         # Calculate heart rate (beats per minute)
         heart_rate = 60 / avg_time_difference
 
@@ -92,7 +90,7 @@ class EKGdata:
 
 if __name__ == "__main__":
     print("This is a module with some functions to read the EKG data")
-    file = open("data/person_db.json")
+    file = open("../data/person_db.json")
     person_data = json.load(file)
     ekg_dict = person_data[0]["ekg_tests"][0]
     print(ekg_dict)
@@ -105,6 +103,7 @@ if __name__ == "__main__":
     df = pd.read_csv(r'data/ekg_data/01_Ruhe.txt', sep='\t', header=None, names=['EKG in mV','Time in ms',])
     peaks = EKGdata.find_peaks(df["EKG in mV"].copy(), 340, 5)
     #print(peaks)
+    
     # peaks als Attribut der Klasse EKGdata hinzufügen
     ekg.peaks_as_attribute(peaks)
     print(ekg.peaks_ekg)

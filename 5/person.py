@@ -6,7 +6,7 @@ class Person:
     @staticmethod
     def load_person_data():
         """A Function that knows where te person Database is and returns a Dictionary with the Persons"""
-        file = open("data/person_db.json")
+        file = open("../data/person_db.json")
         person_data = json.load(file)
         return person_data
 
@@ -80,8 +80,12 @@ if __name__ == "__main__":
 
     person_1_dict = Person.find_person_data_by_name("Huber, Julian")
     person_1 = Person(person_1_dict)
-    print("Alter:",person_1.calc_age()) #alter
-    print("Maximale Herzfrequenz: ", person_1.calc_max_heart_rate())
-    print("Eintrag von gewählter ID:", Person.load_by_id(1)) #id
+
+    alter = person_1.calc_age()
+    max_herzfrequenz = person_1.calc_max_heart_rate()
+    choosen_id = Person.load_by_id(1)
+    print("Alter:", alter)
+    print("Maximale Herzfrequenz:", max_herzfrequenz)
+    print("Eintrag von gewählter ID:", choosen_id)
     
     
