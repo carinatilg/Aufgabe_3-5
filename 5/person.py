@@ -6,7 +6,7 @@ class Person:
     @staticmethod
     def load_person_data():
         """A Function that knows where te person Database is and returns a Dictionary with the Persons"""
-        file = open("../data/person_db.json")
+        file = open("data/person_db.json")
         person_data = json.load(file)
         return person_data
 
@@ -61,7 +61,9 @@ class Person:
         self.max_heart_rate = self.calc_max_heart_rate()
         self.age = self.calc_age()
         self.ecg_data = person_dict["ekg_tests"]
-        
+        self.ecg_result_link = person_dict["ekg_tests"][0]["result_link"]
+
+
 
     def calc_age(self):
         current_year = datetime.now().year

@@ -42,8 +42,8 @@ st.session_state.aktuelle_versuchsperson = st.selectbox(
 # Name der Versuchsperson
 st.write("Der Name ist: ", st.session_state.aktuelle_versuchsperson) 
 # Pfad
-st.write("Bildpfad: ", st.session_state.picture_path)
-st.write("Pfad zu den EKG-Daten: ", st.session_state.ekg_data_path)
+#st.write("Bildpfad: ", st.session_state.picture_path)
+#st.write("Pfad zu den EKG-Daten: ", st.session_state.ekg_data_path)
 
 #-------------
 if st.session_state.aktuelle_versuchsperson in person_names:
@@ -75,10 +75,6 @@ if st.session_state.aktuelle_versuchsperson in person_names:
     st.write("Alter: ", current_person.age)
     st.write("Maximale Herzfrequenz: ", current_person.max_heart_rate)
     st.write("EKG-Daten: ", current_person.ecg_data)
-  
- 
-
-
 
 
 #%% Bild anzeigen
@@ -90,27 +86,21 @@ st.image(image, caption=st.session_state.aktuelle_versuchsperson)
 #% Öffne EKG-Daten
 # TODO: Für eine Person gibt es ggf. mehrere EKG-Daten. Diese müssen über den Pfad ausgewählt werden können
 # Vergleiche Bild und Person
-#ekgs_number = read_ekg_data.load(read_person_data.load_person_data())
 
-#st.header("EKG-Daten")
-#st.session_state.ekg_data_path = st.selectbox(
- #   'EKG-Daten auswählen',
-  #  options =ekgs_number , key="sbVersuchsperson")
 
-#current_egk_data = ekgdata.EKGdata(r"data\ekg_data\01_Ruhe.txt")
-current_egk_data = ekgdata.EKGdata(st.session_state.ekg_data_path)
-
-    # Öffne EKG-Daten
+# Öffne EKG-Daten
 if 'current_person' in locals():
     if len(current_person.ecg_data) > 1:
-        option = st.radio("EKG auswählen: ", (1, 2))
+        option = st.selectbox("EKG auswählen: ", options= [1, 2], key="sbEKG")
         current_ekg = ekgdata.EKGdata(current_person.ecg_data[option-1])
+
     else:
-        current_ekg = ekgdata.EKGdata(current_person.ecg_data[0])
+        current_ekg = current_ekg = ekgdata.EKGdata(current_person.ecg_data[0])
     st.write("Geschätzte Herzfrequenz: ", int(current_ekg.estimated_hr))
 
-    # EKG-Daten als Plotly Plot anzeigen
-    st.plotly_chart(current_ekg.fig)
+    # EKG-Daten anzeigen
+    #st.plotly_chart(current_ekg.fig)
+    st.pyplot(current_ekg.fig)
 else:
     st.write("Bitte wählen Sie eine Versuchsperson aus.")
 
@@ -119,6 +109,7 @@ else:
 
 
 
+current_ekg_data = ekgdata.EKGdata(current_person.ecg_data)
 
 
 
@@ -126,13 +117,14 @@ else:
 #%% EKG-Daten als Matplotlib Plot anzeigen
 # Nachdem die EKG, Daten geladen wurden
 # Erstelle den Plot als Attribut des Objektes
-current_egk_data.plot_time_series()
+current_ekg_data.plot_time_series()
+
 # Zeige den Plot an
-st.pyplot(fig=current_egk_data.fig)
+st.pyplot(fig=current_ekg_data.fig)
 
 
 # %% Herzrate bestimmen
 # Schätze die Herzrate 
-current_egk_data.estimate_hr()
+current_ekg_data.estimate_hr()
 # Zeige die Herzrate an
-st.write("Herzrate ist: ", int(current_egk_data.heat_rate)) 
+st.write("Herzrate ist: ", int(current_ekg_data.heart_rate)) 
