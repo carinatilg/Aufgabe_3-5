@@ -58,6 +58,10 @@ class Person:
         self.lastname = person_dict["lastname"]
         self.picture_path = person_dict["picture_path"]
         self.id = person_dict["id"]
+        self.max_heart_rate = self.calc_max_heart_rate()
+        self.age = self.calc_age()
+        self.ecg_data = person_dict["ekg_tests"]
+        
 
     def calc_age(self):
         current_year = datetime.now().year

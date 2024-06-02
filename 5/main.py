@@ -3,6 +3,7 @@ import read_person_data
 import ekgdata
 import matplotlib.pyplot as plt
 import json
+import person
 
 #%% Zu Beginn
 
@@ -55,29 +56,27 @@ if st.session_state.aktuelle_versuchsperson in person_names:
 # Nachdem eine Versuchsperson ausgewählt wurde, die auch in der Datenbank ist
 # Finde den Pfad zur Bilddatei
 if st.session_state.aktuelle_versuchsperson in person_names:
-    st.session_state.picture_path = read_person_data.find_person_data_by_name(st.session_state.aktuelle_versuchsperson)["picture_path"]
-    # st.write("Der Pfad ist: ", st.session_state.picture_path) 
+    st.session_state.picture_path = read_person_data.find_person_data_by_name(
+        st.session_state.aktuelle_versuchsperson)["picture_path"]
+    
+    # Lade die Daten der Versuchsperson
+    anwender = person.Person.load_person_data()
+    for person_data in anwender:
+        if person_data["lastname"] + ", " + person_data["firstname"] == st.session_state.aktuelle_versuchsperson:
+            current_person = person.Person(person_data)
+            break
 
-
-# Finde den Pfad zur Bilddatei und andere Daten
-if st.session_state.aktuelle_versuchsperson in person_names:
-    person_data = read_person_data.find_person_data_by_name(st.session_state.aktuelle_versuchsperson)
-    st.session_state.picture_path = person_data["picture_path"]
-    st.session_state.birth_date = person_data.get("date_of_birth", "Unbekannt")
-    st.session_state.firstname = person_data.get("firstname", "Unbekannt")
-    st.session_state.lastname = person_data.get("lastname", "Unbekannt")
-
-    # Weitere Daten anzeigen
-    st.write("### Weitere Informationen")
-    st.write("**Vorname:**", st.session_state.firstname)
-    st.write("**Nachname:**", st.session_state.lastname)
-    #st.write("**Alter:**", person_data["age"])
-    st.write("**Geburtsdatum:**", st.session_state.birth_date)
-    st.write("**ID:**", person_data["id"])
-    #st.write("**Maximale Herzfrequenz:**", person_data["max_hr"])
-    #st.write("**Durchnittliche Herzfrequenz:**", person_data["average_hr"])
-    #st.write("**Bildpfad:**", st.session_state.picture_path)
-
+    # Speichere die Daten in Session States
+    st.header("Personendaten:")
+    st.write("ID: ", current_person.id)
+    st.write("Vorname: ", current_person.firstname)
+    st.write("Nachname: ", current_person.lastname)
+    st.write("Geburtsdatum: ", current_person.date_of_birth)
+    st.write("Alter: ", current_person.age)
+    st.write("Maximale Herzfrequenz: ", current_person.max_heart_rate)
+    st.write("EKG-Daten: ", current_person.ecg_data)
+  
+ 
 
 
 
@@ -91,10 +90,29 @@ st.image(image, caption=st.session_state.aktuelle_versuchsperson)
 #% Öffne EKG-Daten
 # TODO: Für eine Person gibt es ggf. mehrere EKG-Daten. Diese müssen über den Pfad ausgewählt werden können
 # Vergleiche Bild und Person
+#ekgs_number = read_ekg_data.load(read_person_data.load_person_data())
+
+#st.header("EKG-Daten")
+#st.session_state.ekg_data_path = st.selectbox(
+ #   'EKG-Daten auswählen',
+  #  options =ekgs_number , key="sbVersuchsperson")
 
 #current_egk_data = ekgdata.EKGdata(r"data\ekg_data\01_Ruhe.txt")
 current_egk_data = ekgdata.EKGdata(st.session_state.ekg_data_path)
 
+    # Öffne EKG-Daten
+if 'current_person' in locals():
+    if len(current_person.ecg_data) > 1:
+        option = st.radio("EKG auswählen: ", (1, 2))
+        current_ekg = ekgdata.EKGdata(current_person.ecg_data[option-1])
+    else:
+        current_ekg = ekgdata.EKGdata(current_person.ecg_data[0])
+    st.write("Geschätzte Herzfrequenz: ", int(current_ekg.estimated_hr))
+
+    # EKG-Daten als Plotly Plot anzeigen
+    st.plotly_chart(current_ekg.fig)
+else:
+    st.write("Bitte wählen Sie eine Versuchsperson aus.")
 
 
 

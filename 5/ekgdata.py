@@ -14,7 +14,7 @@ class EKGdata:
 
     def __init__(self, ekg_dict):
         pass
-        self.id = int(ekg_dict["id"])
+        self.id = ekg_dict["id"]
         self.date = ekg_dict["date"]
         self.data = ekg_dict["result_link"]
         self.df = pd.read_csv(self.data, sep='\t', header=None, names=['EKG in mV','Time in ms',])
@@ -35,7 +35,7 @@ class EKGdata:
         
         for eintrag in person_data:
             for ekg_test in eintrag["ekg_tests"]:
-                if (ekg_test["id"] == such_id):
+                if str(ekg_test["id"]) == such_id:
                     return ekg_test
         return {}
     
