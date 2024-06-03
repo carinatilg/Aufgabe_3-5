@@ -1,0 +1,4 @@
+### Beschreibung der App
+Um mit der App eine Leistungskurve erstellen zu können, muss eine Liste ("Intervall_list") übergeben werden, die alle Zeitintervalle (in Sekunden) beinhaltet, von denen die maximale Leistung, die erbracht werden kann, ausgegeben werden soll. Die Zeitinervalle beginnen immer bei 0 Sekunden, das heißt in der Liste stehen nur noch die Endwerte der Intervalle.
+Außerdem muss der App bei der Variable "fs" übergeben werden, wie viele Werte pro Sekunde der Datensatz enthält. 
+Die Zeitintervalle werden für die Anzeige des Plots von der App in Minuten umgewandelt und die Power Curve wird ausgegeben.
