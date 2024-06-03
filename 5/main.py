@@ -1,39 +1,27 @@
 import streamlit as st
 import read_person_data
 import ekgdata
-import matplotlib.pyplot as plt
-import json
 import person
+from PIL import Image
+import numpy as np
 
-#%% Zu Beginn
-
-# Lade alle Personen
-
-person_names = read_person_data.get_person_list(read_person_data.load_person_data())
 
 # Anlegen diverser Session States
-## Gewählte Versuchsperson
 if 'aktuelle_versuchsperson' not in st.session_state:
-    st.session_state.aktuelle_versuchsperson = 'None'
-
+    st.session_state.aktuelle_versuchsperson = None
 ## Anlegen des Session State. Bild, wenn es kein Bild gibt
 if 'picture_path' not in st.session_state:
-    st.session_state.picture_path = '../data/pictures/none.jpg'
-
+    st.session_state.picture_path = None
 #------------------------------------------------
-## TODO: Session State für Pfad zu EKG Daten 
 if 'ekg_data_path' not in st.session_state:
-    st.session_state.ekg_data_path = '../data/ekg_data/01_Ruhe.txt'
-
-
-
-
-#%% Design des Dashboards
+    st.session_state.ekg_data_path = None
 
 # Schreibe die Überschrift
 st.write("# EKG APP")
 st.write("## Versuchsperson auswählen")
 
+# Lade alle Personen
+person_names = read_person_data.get_person_list(read_person_data.load_person_data())
 # Auswahlbox, wenn Personen anzulegen sind
 st.session_state.aktuelle_versuchsperson = st.selectbox(
     'Versuchsperson',
@@ -47,84 +35,55 @@ st.write("Der Name ist: ", st.session_state.aktuelle_versuchsperson)
 
 #-------------
 if st.session_state.aktuelle_versuchsperson in person_names:
-    st.session_state.picture_path = read_person_data.find_person_data_by_name(st.session_state.aktuelle_versuchsperson)["picture_path"]
+    person_dict = read_person_data.find_person_data_by_name(st.session_state.aktuelle_versuchsperson)
+    selected_person = person.Person(person_dict)
+    st.session_state.picture_path = selected_person.picture_path
 
-
-
-# TODO: Weitere Daten wie Geburtsdatum etc. schön anzeigen
-
-# Nachdem eine Versuchsperson ausgewählt wurde, die auch in der Datenbank ist
-# Finde den Pfad zur Bilddatei
-if st.session_state.aktuelle_versuchsperson in person_names:
-    st.session_state.picture_path = read_person_data.find_person_data_by_name(
-        st.session_state.aktuelle_versuchsperson)["picture_path"]
-    
-    # Lade die Daten der Versuchsperson
-    anwender = person.Person.load_person_data()
-    for person_data in anwender:
-        if person_data["lastname"] + ", " + person_data["firstname"] == st.session_state.aktuelle_versuchsperson:
-            current_person = person.Person(person_data)
-            break
-
-    # Speichere die Daten in Session States
+    # Weitere Daten wie Geburtsdatum etc. schön anzeigen
     st.header("Personendaten:")
-    st.write("ID: ", current_person.id)
-    st.write("Vorname: ", current_person.firstname)
-    st.write("Nachname: ", current_person.lastname)
-    st.write("Geburtsdatum: ", current_person.date_of_birth)
-    st.write("Alter: ", current_person.age)
-    st.write("Maximale Herzfrequenz: ", current_person.max_heart_rate)
-    st.write("EKG-Daten: ", current_person.ecg_data)
+    st.write("ID: ", selected_person.id)
+    st.write("Vorname: ", selected_person.firstname)
+    st.write("Nachname: ", selected_person.lastname)
+    st.write("Geburtsdatum: ", selected_person.date_of_birth)
+    st.write("Alter: ", selected_person.age)
+    st.write("Maximale Herzfrequenz: ", selected_person.max_heart_rate)
+    st.write("EKG-Daten: ", selected_person.ekg_data)
+    
 
+    # show the image
+    image = Image.open(st.session_state.picture_path)
+    st.image(image, caption=st.session_state.aktuelle_versuchsperson)
 
-#%% Bild anzeigen
+    #% Öffne EKG-Daten
+    # TODO: Für eine Person gibt es ggf. mehrere EKG-Daten. Diese müssen über den Pfad ausgewählt werden können
+    # Vergleiche Bild und Person
 
-from PIL import Image
-image = Image.open(st.session_state.picture_path)
-st.image(image, caption=st.session_state.aktuelle_versuchsperson)
+    ekg_ids = [ekg["id"] for ekg in selected_person.ekg_data]
+    # Show ekg in a list
+    selected_id = st.selectbox("EKG auswählen: ", options=ekg_ids, key="sbEKG")
 
-#% Öffne EKG-Daten
-# TODO: Für eine Person gibt es ggf. mehrere EKG-Daten. Diese müssen über den Pfad ausgewählt werden können
-# Vergleiche Bild und Person
+    # EKG Plot und HR Plot
+    ekg_dict = ekgdata.EKGdata.load_by_id(selected_id)
+    #ekg_dict = EKGdata.load_by_id(id_from_selectionbox)
+    ekg_data = ekgdata.EKGdata(ekg_dict)
+    #------------------------------------------------------------
+    df = ekg_data.get_df()
+    #print(df.head())
+    peaks = ekgdata.EKGdata.find_peaks(df['EKG in mV'], 340, 5)
+    #------------------------------------------------------------
+    fig = ekgdata.EKGdata.plot_ekg(df, peaks)
+    #fig.show()
+    st.plotly_chart(fig)
+    
+    #------------------------------------------------------------
+    df_hr = ekgdata.EKGdata.estimate_hr(peaks, 1000)
+    #print(df_hr.head())
+    
+    #------------------------------------------------------------
+    fig = ekgdata.EKGdata.plot_hr(df_hr)
+    #fig.show() 
+    st.plotly_chart(fig)
 
-
-# Öffne EKG-Daten
-if 'current_person' in locals():
-    if len(current_person.ecg_data) > 1:
-        option = st.selectbox("EKG auswählen: ", options= [1, 2], key="sbEKG")
-        current_ekg = ekgdata.EKGdata(current_person.ecg_data[option-1])
-
-    else:
-        current_ekg = current_ekg = ekgdata.EKGdata(current_person.ecg_data[0])
-    st.write("Geschätzte Herzfrequenz: ", int(current_ekg.estimated_hr))
-
-    # EKG-Daten anzeigen
-    #st.plotly_chart(current_ekg.fig)
-    st.pyplot(current_ekg.fig)
-else:
-    st.write("Bitte wählen Sie eine Versuchsperson aus.")
-
-
-
-
-
-
-current_ekg_data = ekgdata.EKGdata(current_person.ecg_data)
-
-
-
-
-#%% EKG-Daten als Matplotlib Plot anzeigen
-# Nachdem die EKG, Daten geladen wurden
-# Erstelle den Plot als Attribut des Objektes
-current_ekg_data.plot_time_series()
-
-# Zeige den Plot an
-st.pyplot(fig=current_ekg_data.fig)
-
-
-# %% Herzrate bestimmen
-# Schätze die Herzrate 
-current_ekg_data.estimate_hr()
-# Zeige die Herzrate an
-st.write("Herzrate ist: ", int(current_ekg_data.heart_rate)) 
+    st.write("Durchsnitt HF:", np.round(df_hr["Heart Rate in bpm"].mean()))
+    
+    #------------------------------------------------------------

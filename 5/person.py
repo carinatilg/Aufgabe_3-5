@@ -60,8 +60,8 @@ class Person:
         self.id = person_dict["id"]
         self.max_heart_rate = self.calc_max_heart_rate()
         self.age = self.calc_age()
-        self.ecg_data = person_dict["ekg_tests"]
-        self.ecg_result_link = person_dict["ekg_tests"][0]["result_link"]
+        self.ekg_data = person_dict["ekg_tests"]
+        self.ekg_result_link = person_dict["ekg_tests"][0]["result_link"]
 
 
 

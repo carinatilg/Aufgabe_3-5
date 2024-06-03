@@ -66,7 +66,7 @@ class EKGdata:
     def plot_ekg(df, peaks):
         df.loc[:, "is_peak"] = False
         df.loc[peaks, "is_peak"] = True
-        fig = px.scatter(df, x='Time in ms', y='EKG in mV', color='is_peak') 
+        fig = px.scatter(df, x='Time in s', y='EKG in mV', color='is_peak') 
         return fig
     
     @staticmethod
@@ -81,11 +81,6 @@ class EKGdata:
         self.id = ekg_dict["id"]
         self.date = ekg_dict["date"]
         self.data = ekg_dict["result_link"]
-        #self.df = pd.read_csv(self.data, sep='\t', header=None, names=['EKG in mV','Time in ms',])
-        #self.peaks = self.find_peaks()
-        #self.estimate_HR = self.estimate_hr()
-        #self.estimated_hr = self.estimate_hr()
-        #self.fig = self.plot_time_series()
 
 
     def get_df(self):
@@ -103,6 +98,7 @@ class EKGdata:
         # Calculate heart rate (beats per minute)
         heart_rate = 60. / time_difference
         time_array = np.array(peaks[1:]) / sampling_rate
+        
 
         # Create dataframe
         df_hr = pd.DataFrame({'Time in s': time_array, 'Heart Rate in bpm': heart_rate})
@@ -126,7 +122,7 @@ if __name__ == "__main__":
     print(df.head())
     peaks = EKGdata.find_peaks(df['EKG in mV'], 340, 5)
     #------------------------------------------------------------
-    fig = EKGdata.plot_ekg(df, peaks)
+    fig = EKGdata.plot_ekg(df, peaks,)
     fig.show()
     
     #------------------------------------------------------------
@@ -136,12 +132,6 @@ if __name__ == "__main__":
     fig = EKGdata.plot_hr(df_hr)
     fig.show() 
     #------------------------------------------------------------
-
-
-    
-
-    
-    
 
 
 # %%
