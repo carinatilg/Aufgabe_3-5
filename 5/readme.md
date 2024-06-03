@@ -1,3 +1,7 @@
+![Screenshot 2 der App](Streamlit_App_1.png)
+![Screenshot 2 der App](Streamlit_App_2.png)
+![Screenshot 2 der App](Streamlit_App_3.png)
+![Screenshot 2 der App](Streamlit_App_4.png)
 ## Beschreibung der App
 Die App dient dazu Patienten aufzurufen und verschiedene hinterlegte Daten zu öffnen. Zum Einen zeigt die App den Namen des Patienten, sein Foto, Geburtsdatum, Alter, maximale Herzfrequenz und seine ID in der Datenbank an. Außerdem gibt die App, falls vorhanden, die hinter dem Patienten gespeicherte EKG-Daten (inkl. EKG-Id, Datum und result link) aus. Je nach dem wie viele EKGs vorhanden sind, kann man über die EKG-Id einen Datensatz auswählen und die EKG-Daten werden in mV pro Sekunde als Plot anzeigt. Falls nur ein Datensatz vorhanden ist, wird automatisch nur dieser als Plot angezeigt. Neben dem EKG-Plot zeigt die App auch einen Plot der Herzfrequenz in bpm pro Sekunde, die während des EKGs gemessen wurde, an. Passend dazu gibt die App außerdem die durchschnittliche Herzfrequenz während der Messung aus. 
 
